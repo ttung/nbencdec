@@ -1,0 +1,3 @@
+ipython
+nbconvert-pyencoded
+pytest
