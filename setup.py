@@ -7,7 +7,7 @@ install_requires = [line.rstrip() for line in open(os.path.join(os.path.dirname(
 
 setuptools.setup(
     name="nbencdec",
-    version="0.0.1",
+    version="0.0.2",
     description="Encode/decode Python Notebook files to .py files.",
     author="Tony Tung",
     author_email="ttung@chanzuckerberg.com",
