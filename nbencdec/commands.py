@@ -1,7 +1,9 @@
 #!/usr/bin/env python
 
 import argparse
+import contextlib
 import json
+import sys
 
 from nbconvert import EncodedPythonExporter
 
@@ -12,13 +14,28 @@ EPY_TRANSFORM_MARKER = "# EPY: ESCAPE "
 EPY_END_MARKER = "# EPY: END "
 
 
+@contextlib.contextmanager
+def stdio_wrapper(stdio_fh):
+    yield stdio_fh
+
+
+def open_possibly_stdio(stdio_handle, filename, mode):
+    """
+    Given a filename, either return a contextmanager wrapping `stdio_handle` if
+    `filename` is "-", or a handle to the file specified in `filename`.
+    """
+    if filename == "-":
+        return stdio_wrapper(stdio_handle)
+    else:
+        return open(filename, mode)
+
 def decode(args):
     notebook = {
         'cells': []
     }
 
-    with open(args.source, "r") as fh:
-        iterator = iter(fh.readlines())
+    with open_possibly_stdio(sys.stdin, args.source, "r") as input_fh:
+        iterator = iter(input_fh.readlines())
 
         # read until we get the stripped notebook marker.
         for line in iterator:
@@ -66,17 +83,19 @@ def decode(args):
 
             notebook['cells'].append(cell)
 
-    with open(args.output, "w") as fh:
+    with open_possibly_stdio(sys.stdout, args.output, "w") as output_fh:
         json.dump(
-            notebook, fh,
+            notebook, output_fh,
             sort_keys=True, indent=1, separators=(',', ': '))
 
 
 def encode(args):
     encoder = EncodedPythonExporter()
-    encoded, _ = encoder.from_filename(args.notebook)
-    with open(args.output, "w") as fh:
-        fh.write(encoded)
+
+    with open_possibly_stdio(sys.stdin, args.notebook, "r") as input_fh, \
+          open_possibly_stdio(sys.stdout, args.output, "w") as output_fh:
+        encoded, _ = encoder.from_file(input_fh)
+        output_fh.write(encoded)
 
 
 def parse_args():
