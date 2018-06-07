@@ -5,7 +5,7 @@ import contextlib
 import json
 import sys
 
-from nbconvert import EncodedPythonExporter
+from nbencdec.exporters import EncodedPythonExporter
 
 
 STRIPPED_NOTEBOOK_MARKER = "# EPY: stripped_notebook: "
