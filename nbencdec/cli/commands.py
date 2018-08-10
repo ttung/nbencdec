@@ -78,7 +78,7 @@ def decode(args):
                 cell['outputs'] = []
 
             # strip the final "\n" from the last line.  it's weird.
-            if cell['source'][-1].endswith("\n"):
+            if len(cell['source']) > 0 and cell['source'][-1].endswith("\n"):
                 cell['source'][-1] = cell['source'][-1][:-1]
 
             notebook['cells'].append(cell)
