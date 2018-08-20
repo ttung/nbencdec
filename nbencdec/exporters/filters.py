@@ -3,7 +3,7 @@ import functools
 
 def comment_lines_with_escaping(
         text,
-        prefix='# ',
+        prefix="#",
         escape_prefix="# EPY",
         escape_format_string="# EPY: ESCAPE {}"):
     """
