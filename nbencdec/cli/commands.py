@@ -70,7 +70,7 @@ def decode(args):
                     continue
 
                 if cell['cell_type'] == 'markdown':
-                    line = line[2:]
+                    line = line[1:]
                 cell['source'].append(line)
 
             if cell['cell_type'] == 'code':
