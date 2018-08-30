@@ -9,7 +9,7 @@
 
 {% block input %}
 # EPY: START code
-{{ cell.source | ipython2encodedpython -}}
+{{ cell.source | ipython2encodedpython }}
 # EPY: END code
 {% endblock input %}
 

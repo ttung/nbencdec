@@ -74,4 +74,8 @@ def ipython2encodedpython(code):
 
     isp = IPythonInputSplitter(line_input_checker=False, logical_line_transforms=logical_line_transforms)
     result = isp.transform_cell(code)
+    if result.endswith("\n") and not code.endswith("\n"):
+        # transform_cell always slaps a trailing NL.  If the input did _not_
+        # have a trailing NL, then we remove it.
+        result = result[:-1]
     return result
