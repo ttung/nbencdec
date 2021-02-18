@@ -7,7 +7,8 @@ import copy
 import json
 import os
 
-from traitlets import default
+from jupyter_core.paths import jupyter_path
+from traitlets import default, validate
 
 from nbconvert.exporters.templateexporter import TemplateExporter
 from .filters import comment_lines_with_escaping, ipython2encodedpython
@@ -23,13 +24,20 @@ class EncodedPythonExporter(TemplateExporter):
     """
     Exports a Python code file.
     """
-    @property
-    def template_path(self):
+    @validate('template_data_paths')
+    def _add_template_path(self, proposal):
         """
         We want to inherit from HTML template, and have template under
         `./templates/` so append it to the search path. (see next section)
         """
-        return super().template_path+[os.path.join(os.path.dirname(__file__), "templates")]
+        our_path = os.path.join(os.path.dirname(__file__), "templates")
+        base_paths = jupyter_path("nbconvert", "templates", "base")
+        if our_path not in proposal['value']:
+            proposal['value'].append(our_path)
+        for base_path in base_paths:
+            if base_path not in proposal['value']:
+                proposal['value'].append(base_path)
+        return proposal['value']
 
     def default_filters(self):
         filters = list(super().default_filters())

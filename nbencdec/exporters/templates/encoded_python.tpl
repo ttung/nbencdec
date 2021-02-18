@@ -1,4 +1,4 @@
-{%- extends 'null.tpl' -%}
+{%- extends 'null.j2' -%}
 
 {%- block header -%}
 #!/usr/bin/env python
