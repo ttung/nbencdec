@@ -24,20 +24,17 @@ class EncodedPythonExporter(TemplateExporter):
     """
     Exports a Python code file.
     """
-    @validate('template_data_paths')
-    def _add_template_path(self, proposal):
+    @default('extra_template_paths')
+    def _extra_template_paths_default(self):
         """
         We want to inherit from HTML template, and have template under
         `./templates/` so append it to the search path. (see next section)
         """
-        our_path = os.path.join(os.path.dirname(__file__), "templates")
+        our_path = os.path.join(os. path.dirname(__file__), "templates")
         base_paths = jupyter_path("nbconvert", "templates", "base")
-        if our_path not in proposal['value']:
-            proposal['value'].append(our_path)
-        for base_path in base_paths:
-            if base_path not in proposal['value']:
-                proposal['value'].append(base_path)
-        return proposal['value']
+        paths = [our_path]
+        paths.extend(base_paths)
+        return paths
 
     def default_filters(self):
         filters = list(super().default_filters())
