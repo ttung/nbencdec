@@ -30,7 +30,7 @@ class EncodedPythonExporter(TemplateExporter):
         We want to inherit from HTML template, and have template under
         `./templates/` so append it to the search path. (see next section)
         """
-        our_path = os.path.join(os. path.dirname(__file__), "templates")
+        our_path = os.path.join(os.path.dirname(__file__), "templates")
         base_paths = jupyter_path("nbconvert", "templates", "base")
         paths = [our_path]
         paths.extend(base_paths)
